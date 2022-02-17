@@ -2,6 +2,8 @@ package net.idrok.tester.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +13,7 @@ import net.idrok.tester.entity.Savol;
 import net.idrok.tester.repository.SavolRepository;
 
 @Service
+@Transactional
 public class SavolService {
     @Autowired
     SavolRepository savolRepository;
