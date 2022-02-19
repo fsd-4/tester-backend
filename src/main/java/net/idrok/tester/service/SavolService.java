@@ -1,6 +1,8 @@
 package net.idrok.tester.service;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import net.idrok.tester.entity.Savol;
 import net.idrok.tester.repository.SavolRepository;
+import net.idrok.tester.service.dto.SavolDTO;
 
 @Service
 @Transactional
@@ -19,24 +22,28 @@ public class SavolService {
     SavolRepository savolRepository;
 
 
-    public Page<Savol> getAll(String key, Pageable pageable) {
-        return savolRepository.findAllByMatnContainingIgnoreCaseOrFanNomContainingIgnoreCase(key, key, pageable);
+    public Page<SavolDTO> getAll(String key, Pageable pageable) {
+        // return savolRepository.findAllByMatnContainingIgnoreCaseOrFanNomContainingIgnoreCase(key, key, pageable).map(savol-> new SavolDTO(savol));
+        return savolRepository.findAllByMatnContainingIgnoreCaseOrFanNomContainingIgnoreCase(key, key, pageable).map(SavolDTO::new);
     }
 
 
-    public Savol getById(Long id) {
+    public SavolDTO getById(Long id) {
+        return savolRepository.findById(id).map(SavolDTO::new).get();
+    }
+    public Savol getByIdEntity(Long id) {
         return savolRepository.findById(id).get();
     }
 
-    public Savol create(Savol savol) {
+    public SavolDTO create(Savol savol) {
         if (savol.getId() == null)
-            return savolRepository.save(savol);
+            return new SavolDTO(savolRepository.save(savol));
         throw new RuntimeException("id null bo'lishi zarur");
     }
 
-    public Savol update(Savol savol) {
+    public SavolDTO update(Savol savol) {
         if (savol.getId() != null)
-          return  savolRepository.save(savol);
+          return new SavolDTO(savolRepository.save(savol));
         throw new RuntimeException("id null bo'lishi zarur");
     }
 

@@ -25,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import net.idrok.tester.entity.Savol;
 import net.idrok.tester.service.SavolService;
+import net.idrok.tester.service.dto.SavolDTO;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,22 +42,21 @@ public class SavolController {
 
 
     @GetMapping()
-    public ResponseEntity<Page<Savol>> getAll(@RequestParam(name = "key", required = false) String key, Pageable pageable) {
+    public ResponseEntity<Page<SavolDTO>> getAll(@RequestParam(name = "key", required = false) String key, Pageable pageable) {
         if(key == null) key = "";
-        Page<Savol> p  = savolService.getAll(key, pageable);
-        p.getContent().forEach(s->s.setRasm(null));
-        return ResponseEntity.ok(p);
+            
+        return ResponseEntity.ok(savolService.getAll(key, pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Savol> getById(@PathVariable Long id) {
+    public ResponseEntity<SavolDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(savolService.getById(id));
     }
 
     @GetMapping("/{id}/download")
     public ResponseEntity<ByteArrayResource> getSavolFayl(@PathVariable Long id) throws IOException{
 
-        Savol s = savolService.getById(id);
+        Savol s = savolService.getByIdEntity(id);
         byte[] rasm = s.getRasm();
         if(rasm == null){
             return ResponseEntity.notFound().build();
@@ -74,7 +75,7 @@ public class SavolController {
     @PostMapping("/{id}/upload")
     public ResponseEntity<?> uploadSavolFayl(@PathVariable Long id, @RequestParam("file") MultipartFile file){
 
-        Savol s = savolService.getById(id);
+        Savol s = savolService.getByIdEntity(id);
 
         try {
             s.setRasm(file.getBytes());
@@ -90,11 +91,11 @@ public class SavolController {
 
 
     @PostMapping()
-    public ResponseEntity<Savol> create(@RequestBody Savol savol){
+    public ResponseEntity<SavolDTO> create(@RequestBody Savol savol){
         return ResponseEntity.ok(savolService.create(savol));
     }
     @PutMapping()
-    public ResponseEntity<Savol> update(@RequestBody Savol savol){
+    public ResponseEntity<SavolDTO> update(@RequestBody Savol savol){
         return ResponseEntity.ok(savolService.update(savol));
     }
     @DeleteMapping("/{id}")
