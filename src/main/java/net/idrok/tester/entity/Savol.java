@@ -3,10 +3,9 @@ package net.idrok.tester.entity;
 
 import java.util.Set;
 
-import javax.persistence.Basic;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,6 +32,13 @@ public class Savol {
     private Set<Variant> variantlar;
 
     private SavolDaraja savolDaraja;
+
+    @ManyToOne
+    private User user;
+
+    private KurishHuquq kurishHuquq;
+
+
 
     public Long getId() {
         return id;
@@ -80,6 +86,22 @@ public class Savol {
 
     public void setRasm(byte[] rasm) {
         this.rasm = rasm;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public KurishHuquq getKurishHuquq() {
+        return kurishHuquq;
+    }
+
+    public void setKurishHuquq(KurishHuquq kurishHuquq) {
+        this.kurishHuquq = kurishHuquq;
     }
 
 

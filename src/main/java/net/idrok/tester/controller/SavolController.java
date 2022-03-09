@@ -4,9 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
-import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -19,10 +16,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import net.idrok.tester.entity.Imtihon;
 import net.idrok.tester.entity.Savol;
 import net.idrok.tester.service.SavolService;
 import net.idrok.tester.service.dto.SavolDTO;
@@ -55,7 +52,6 @@ public class SavolController {
 
     @GetMapping("/{id}/download")
     public ResponseEntity<ByteArrayResource> getSavolFayl(@PathVariable Long id) throws IOException{
-
         Savol s = savolService.getByIdEntity(id);
         byte[] rasm = s.getRasm();
         if(rasm == null){
@@ -74,7 +70,7 @@ public class SavolController {
     }
     @PostMapping("/{id}/upload")
     public ResponseEntity<?> uploadSavolFayl(@PathVariable Long id, @RequestParam("file") MultipartFile file){
-
+        
         Savol s = savolService.getByIdEntity(id);
 
         try {
