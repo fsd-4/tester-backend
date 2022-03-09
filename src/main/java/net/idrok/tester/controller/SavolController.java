@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.var;
 import net.idrok.tester.entity.Imtihon;
 import net.idrok.tester.entity.Savol;
+import net.idrok.tester.entity.Variant;
+import net.idrok.tester.repository.VariantRepository;
 import net.idrok.tester.service.SavolService;
 import net.idrok.tester.service.dto.SavolDTO;
 
@@ -36,6 +39,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SavolController {
     @Autowired
     SavolService savolService;
+    @Autowired
+    VariantRepository variantRepo;
 
 
     @GetMapping()
@@ -94,6 +99,31 @@ public class SavolController {
     public ResponseEntity<SavolDTO> update(@RequestBody Savol savol){
         return ResponseEntity.ok(savolService.update(savol));
     }
+    @PostMapping("/variant")
+    public ResponseEntity<SavolDTO> createVariant(@RequestBody Variant variant){
+        if(variant.getSavol() != null && variant.getId() == null){
+            variantRepo.save(variant);
+               
+               
+             return ResponseEntity.ok(savolService.getById(variant.getSavol().getId()));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+       
+    @PutMapping("/variant")
+    public ResponseEntity<SavolDTO> updateVariant(@RequestBody Variant variant){
+        if(variant.getSavol() != null && variant.getId() != null){
+            Variant v = variantRepo.findById(variant.getId()).orElseThrow();
+            v.setMatn(variant.getMatn());
+            v.setTugri(variant.getTugri());
+            variantRepo.save(v);
+            return ResponseEntity.ok(savolService.getById(variant.getSavol().getId()));
+        }
+        return ResponseEntity.badRequest().build();
+
+       
+    }
+   
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         savolService.deleteById(id);

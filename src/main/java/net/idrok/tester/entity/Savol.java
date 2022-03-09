@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Savol {
     @Id
@@ -33,6 +35,7 @@ public class Savol {
     private Fan fan;
 
     @OneToMany(mappedBy = "savol")
+    @JsonBackReference(value = "savol")
     private Set<Variant> variantlar;
 
     private SavolDaraja savolDaraja;
