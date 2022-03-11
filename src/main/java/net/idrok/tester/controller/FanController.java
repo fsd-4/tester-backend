@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.idrok.tester.entity.Fan;
 import net.idrok.tester.service.FanService;
+import net.idrok.tester.service.impl.FanServiceImpl;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/fan")
 @CrossOrigin(maxAge = 3600)
 public class FanController {
+
     @Autowired
     FanService fanService;
 
@@ -29,7 +32,9 @@ public class FanController {
     @GetMapping()
     public ResponseEntity<List<Fan>> getAll(@RequestParam(name = "key", required = false) String key) {
         if(key == null) key = "";
+        
         return ResponseEntity.ok(fanService.getAll(key));
+
     }
 
     @GetMapping("/{id}")

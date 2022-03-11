@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SavolController {
     @Autowired
     SavolService savolService;
+
     @Autowired
     VariantRepository variantRepo;
 
@@ -51,13 +52,13 @@ public class SavolController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SavolDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<Savol> getById(@PathVariable Long id) {
         return ResponseEntity.ok(savolService.getById(id));
     }
 
     @GetMapping("/{id}/download")
     public ResponseEntity<ByteArrayResource> getSavolFayl(@PathVariable Long id) throws IOException{
-        Savol s = savolService.getByIdEntity(id);
+        Savol s = savolService.getById(id);
         byte[] rasm = s.getRasm();
         if(rasm == null){
             return ResponseEntity.notFound().build();
@@ -76,7 +77,7 @@ public class SavolController {
     @PostMapping("/{id}/upload")
     public ResponseEntity<?> uploadSavolFayl(@PathVariable Long id, @RequestParam("file") MultipartFile file){
         
-        Savol s = savolService.getByIdEntity(id);
+        Savol s = savolService.getById(id);
 
         try {
             s.setRasm(file.getBytes());
@@ -92,15 +93,15 @@ public class SavolController {
 
 
     @PostMapping()
-    public ResponseEntity<SavolDTO> create(@RequestBody Savol savol){
+    public ResponseEntity<Savol> create(@RequestBody Savol savol){
         return ResponseEntity.ok(savolService.create(savol));
     }
     @PutMapping()
-    public ResponseEntity<SavolDTO> update(@RequestBody Savol savol){
+    public ResponseEntity<Savol> update(@RequestBody Savol savol){
         return ResponseEntity.ok(savolService.update(savol));
     }
     @PostMapping("/variant")
-    public ResponseEntity<SavolDTO> createVariant(@RequestBody Variant variant){
+    public ResponseEntity<Savol> createVariant(@RequestBody Variant variant){
         if(variant.getSavol() != null && variant.getId() == null){
             variantRepo.save(variant);
                
@@ -111,7 +112,7 @@ public class SavolController {
     }
        
     @PutMapping("/variant")
-    public ResponseEntity<SavolDTO> updateVariant(@RequestBody Variant variant){
+    public ResponseEntity<Savol> updateVariant(@RequestBody Variant variant){
         if(variant.getSavol() != null && variant.getId() != null){
             Variant v = variantRepo.findById(variant.getId()).orElseThrow();
             v.setMatn(variant.getMatn());
@@ -127,6 +128,11 @@ public class SavolController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         savolService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+    @DeleteMapping("/variant/{id}")
+    public ResponseEntity<?> deleteVariant(@PathVariable Long id) {
+        variantRepo.deleteById(id);
         return ResponseEntity.noContent().build();
     }
     
