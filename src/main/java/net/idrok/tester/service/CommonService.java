@@ -37,7 +37,7 @@ public interface CommonService<T> {
     public void delete(T entity);
     /**
      * Bu metod entityni o'chirish uchun mo'jlallanag
-     * @param entityId Long turidagi o'zgaruvchi
+     * @param dataId Long turidagi o'zgaruvchi
      * @return void
      */
     public void deleteById(Long dataId);

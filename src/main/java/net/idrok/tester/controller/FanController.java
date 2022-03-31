@@ -2,23 +2,19 @@ package net.idrok.tester.controller;
 
 import java.util.List;
 
+import org.hibernate.dialect.CockroachDB192Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.HttpRequestHandler;
+import org.springframework.web.bind.annotation.*;
 
 import net.idrok.tester.entity.Fan;
 import net.idrok.tester.service.FanService;
 import net.idrok.tester.service.impl.FanServiceImpl;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/fan")
@@ -30,11 +26,11 @@ public class FanController {
 
 
     @GetMapping()
-    public ResponseEntity<List<Fan>> getAll(@RequestParam(name = "key", required = false) String key) {
-        if(key == null) key = "";
-        
-        return ResponseEntity.ok(fanService.getAll(key));
+    public ResponseEntity<List<Fan>> getAll(@RequestParam(name = "key", required = false) String key,
+                                            HttpServletRequest req, HttpServletResponse res) {
 
+        if(key == null) key = "";
+        return ResponseEntity.ok(fanService.getAll(key));
     }
 
     @GetMapping("/{id}")

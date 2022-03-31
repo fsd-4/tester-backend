@@ -34,15 +34,19 @@ public class User {
     private String login;
 
     @NotNull
-    @Size(min = 6, max = 30)
-    @Column(nullable = false, length = 30)
+    @Size(min = 60, max = 60)
+    @Column(nullable = false, length = 60)
     private String parol;
+    private Role role;
+
 
     private LocalDateTime regVaqt;
     private LocalDateTime oxirgiTashrif;
 
+    private Boolean aktiv;
+
     
-    private Role role;
+
 
 
     public Long getId() {
@@ -94,7 +98,11 @@ public class User {
         this.role = role;
     }
 
+    public Boolean getAktiv() {
+        return aktiv;
+    }
 
-    
-
+    public void setAktiv(Boolean aktiv) {
+        this.aktiv = aktiv;
+    }
 }
