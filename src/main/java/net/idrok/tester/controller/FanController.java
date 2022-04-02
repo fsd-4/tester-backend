@@ -28,7 +28,6 @@ public class FanController {
     @GetMapping()
     public ResponseEntity<List<Fan>> getAll(@RequestParam(name = "key", required = false) String key,
                                             HttpServletRequest req, HttpServletResponse res) {
-
         if(key == null) key = "";
         return ResponseEntity.ok(fanService.getAll(key));
     }
