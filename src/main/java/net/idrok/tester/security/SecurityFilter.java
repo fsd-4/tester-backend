@@ -1,5 +1,6 @@
 package net.idrok.tester.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,12 +18,16 @@ import java.util.Set;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
+
+    @Autowired
+    JwtUtil jwtUtil;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String login = request.getHeader("login");
-        if(login != null && !login.isEmpty()){
+        String token = request.getHeader("token");
+        if(token != null && !token.isEmpty() && jwtUtil.validateToken(token)){
 
-            UserDetails userDetails = new User(login, "",  Set.of(new SimpleGrantedAuthority("ADMIN")));
+            UserDetails userDetails = new User(jwtUtil.getLogin(token), "",  Set.of(new SimpleGrantedAuthority(jwtUtil.getRole(token))));
 
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());

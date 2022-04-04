@@ -33,13 +33,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // Barcha so'rovlar yopish
         http.authorizeRequests()
+                // fan'ni GET qilsishni umuman ochib qo'yish
                 .antMatchers(HttpMethod.GET, "/api/fan").permitAll()
+                // savol'larning har qanday so'rovini faqatgina ADMIN ga ochish
                 .antMatchers("/api/savol").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+        // Fiterni berish
         http.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
     }
     @Override
