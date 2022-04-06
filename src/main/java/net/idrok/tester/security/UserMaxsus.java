@@ -15,6 +15,8 @@ public class UserMaxsus implements UserDetails {
     private Set<GrantedAuthority> authority;
     private Boolean enabled;
 
+    public UserMaxsus(){}
+
     public UserMaxsus(User user){
         this.username = user.getLogin();
         this.password = user.getParol();

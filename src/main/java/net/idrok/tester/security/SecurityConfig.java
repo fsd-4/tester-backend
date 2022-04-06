@@ -1,8 +1,10 @@
 package net.idrok.tester.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -24,19 +27,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     SecurityFilter securityFilter;
+    @Autowired
+    PasswordEncoder encoder;
+
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userProvider).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userProvider).passwordEncoder(encoder);
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http = http.cors().and().csrf().disable();
         // Barcha so'rovlar yopish
         http.authorizeRequests()
                 // fan'ni GET qilsishni umuman ochib qo'yish
-                .antMatchers(HttpMethod.GET, "/api/fan").permitAll()
-                // savol'larning har qanday so'rovini faqatgina ADMIN ga ochish
-                .antMatchers("/api/savol").hasAnyRole("ADMIN")
+                .antMatchers("/api/fan").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/account/auth").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/account/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
@@ -48,4 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
     }
+
+
 }

@@ -24,16 +24,21 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader("token");
-        if(token != null && !token.isEmpty() && jwtUtil.validateToken(token)){
+        String token = request.getHeader("Authorization");
+        if(token != null && !token.isEmpty() ){
+            // Bearer ni olib tashlash
+            token = token.substring(7);
+            if( jwtUtil.validateToken(token)){
 
-            UserDetails userDetails = new User(jwtUtil.getLogin(token), "",  Set.of(new SimpleGrantedAuthority(jwtUtil.getRole(token))));
+                UserDetails userDetails = new User(jwtUtil.getLogin(token), "",  Set.of(new SimpleGrantedAuthority(jwtUtil.getRole(token))));
 
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
         }
+
         filterChain.doFilter(request, response);
     }
 }

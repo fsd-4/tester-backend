@@ -37,6 +37,8 @@ public class User {
     @Size(min = 60, max = 60)
     @Column(nullable = false, length = 60)
     private String parol;
+
+
     private Role role;
 
 

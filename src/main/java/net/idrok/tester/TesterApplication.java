@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -27,9 +28,11 @@ public class TesterApplication {
 	final Logger LOG = LoggerFactory.getLogger(TesterApplication.class.getName());
 
 
+	@Autowired
+	PasswordEncoder encoder;
 	@PostConstruct
 	public void birlamchiAdminlarniBelgilash(){
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
 
 		if(userRepository.findByLogin("admin123").isEmpty()){
 			User user = new User();

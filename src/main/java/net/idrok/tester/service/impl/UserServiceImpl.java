@@ -1,9 +1,12 @@
 package net.idrok.tester.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import net.idrok.tester.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import net.idrok.tester.entity.User;
@@ -14,6 +17,8 @@ import net.idrok.tester.service.UserService;
 public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    PasswordEncoder encoder;
 
     @Override
     public List<User> getAll(String key) {
@@ -30,7 +35,15 @@ public class UserServiceImpl implements UserService{
     @Override
     public User create(User entity) {
         // TODO Auto-generated method stub
-        return userRepository.save(entity);
+        if(entity.getId() == null){
+            entity.setRole(Role.USER);
+            entity.setRegVaqt(LocalDateTime.now());
+            entity.setOxirgiTashrif(LocalDateTime.now());
+            entity.setAktiv(true);
+            entity.setParol(encoder.encode(entity.getParol()));
+            return userRepository.save(entity);
+        }
+        throw new RuntimeException("id null bo'lsihi shart");
     }
 
     @Override
