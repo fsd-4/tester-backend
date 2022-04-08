@@ -48,7 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Barcha so'rovlar yopish
         http.authorizeRequests()
                 // fan'ni GET qilsishni umuman ochib qo'yish
-                .antMatchers("/api/fan").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/account/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/account/register").permitAll()
                 .anyRequest().authenticated()

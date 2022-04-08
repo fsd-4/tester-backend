@@ -7,6 +7,7 @@ import net.idrok.tester.security.JwtUtil;
 import net.idrok.tester.security.Token;
 import net.idrok.tester.security.UserMaxsus;
 import net.idrok.tester.service.UserService;
+import net.idrok.tester.service.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,10 +41,7 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public Token register(@RequestBody User user){
-       String eskiParol = user.getParol();
-        userService.create(user);
-        user.setParol(eskiParol);
-        return auth(new UserMaxsus(user));
+    public UserDTO register(@RequestBody User user){
+        return new UserDTO(userService.create(user));
     }
 }
