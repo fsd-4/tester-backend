@@ -44,4 +44,9 @@ public class AccountController {
     public UserDTO register(@RequestBody User user){
         return new UserDTO(userService.create(user));
     }
+
+    @GetMapping("/current")
+    public UserDTO getCurrentuser(){
+        return userService.getCurrentUser();
+    }
 }

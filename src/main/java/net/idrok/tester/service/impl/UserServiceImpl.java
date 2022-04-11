@@ -5,7 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import net.idrok.tester.entity.Role;
+import net.idrok.tester.service.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -69,5 +74,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public Optional<User> getByLogin(String login) {
         return userRepository.findByLogin(login);
+    }
+
+    @Override
+    public UserDTO getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.getPrincipal() instanceof UserDetails){
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            User u = userRepository.findByLogin(userDetails.getUsername()).orElseThrow(()->  new RuntimeException("not found"));
+            return new UserDTO(u);
+        }
+        throw new RuntimeException("not found");
     }
 }
