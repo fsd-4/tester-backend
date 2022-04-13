@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/systemuser")
 @CrossOrigin(maxAge = 3600)
 public class UserController {
     @Autowired

@@ -37,20 +37,13 @@ public class User {
     @Size(min = 60, max = 60)
     @Column(nullable = false, length = 60)
     private String parol;
-
-
     private Role role;
-
-
     private LocalDateTime regVaqt;
     private LocalDateTime oxirgiTashrif;
 
     private Boolean aktiv;
 
-    
-
-
-
+    private String key;
     public Long getId() {
         return id;
     }

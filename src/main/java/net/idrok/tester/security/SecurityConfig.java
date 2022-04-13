@@ -1,5 +1,6 @@
 package net.idrok.tester.security;
 
+import net.idrok.tester.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,7 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // fan'ni GET qilsishni umuman ochib qo'yish
                 .antMatchers(HttpMethod.POST, "/api/account/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/account/register").permitAll()
-                .anyRequest().authenticated()
+                // User huquqlari
+                .antMatchers("/api/user/**").authenticated()
+                // QOLGAN BARCHASI FAQAT ADMINGA
+                .anyRequest().hasAnyRole(Role.ADMIN.toString())
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
