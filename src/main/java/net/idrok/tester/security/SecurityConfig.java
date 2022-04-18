@@ -55,10 +55,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // fan'ni GET qilsishni umuman ochib qo'yish
                 .antMatchers(HttpMethod.POST, "/api/account/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/account/register").permitAll()
+                .antMatchers( "/api/fayl/**").permitAll()
                 // User huquqlari
                 .antMatchers("/api/user/**").authenticated()
+                .antMatchers("/api/account/**").authenticated()
                 // QOLGAN BARCHASI FAQAT ADMINGA
-                .anyRequest().hasAnyRole(Role.ADMIN.toString())
+                .anyRequest().hasAnyAuthority(Role.ADMIN.toString())
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

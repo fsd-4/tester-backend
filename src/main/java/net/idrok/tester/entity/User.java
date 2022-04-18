@@ -2,12 +2,7 @@ package net.idrok.tester.entity;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -42,6 +37,10 @@ public class User {
     private LocalDateTime oxirgiTashrif;
 
     private Boolean aktiv;
+
+    @ManyToOne
+    private Fayl rasm;
+
 
     private String key;
     public Long getId() {
@@ -99,5 +98,13 @@ public class User {
 
     public void setAktiv(Boolean aktiv) {
         this.aktiv = aktiv;
+    }
+
+    public Fayl getRasm() {
+        return rasm;
+    }
+
+    public void setRasm(Fayl rasm) {
+        this.rasm = rasm;
     }
 }

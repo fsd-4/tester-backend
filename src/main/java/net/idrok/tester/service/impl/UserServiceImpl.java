@@ -53,8 +53,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User update(User entity) {
-        // TODO Auto-generated method stub
-        return userRepository.save(entity);
+        User u = userRepository.findById(entity.getId()).get();
+        u.setIsm(entity.getIsm());
+        u.setFamiliya(entity.getFamiliya());
+        u.setRasm(entity.getRasm());
+        return userRepository.save(u);
     }
 
     @Override

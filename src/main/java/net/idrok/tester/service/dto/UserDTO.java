@@ -1,5 +1,6 @@
 package net.idrok.tester.service.dto;
 
+import net.idrok.tester.entity.Fayl;
 import net.idrok.tester.entity.Role;
 import net.idrok.tester.entity.User;
 
@@ -19,6 +20,7 @@ public class UserDTO {
     private String login;
     private Role role;
     private LocalDateTime regVaqt;
+    private Fayl rasm;
 
     public UserDTO(){}
     public UserDTO(User user){
@@ -28,6 +30,7 @@ public class UserDTO {
         this.login = user.getLogin();
         this.regVaqt = user.getRegVaqt();
         this.role = user.getRole();
+        this.rasm = user.getRasm();
     }
 
     public Long getId() {
@@ -76,5 +79,13 @@ public class UserDTO {
 
     public void setRegVaqt(LocalDateTime regVaqt) {
         this.regVaqt = regVaqt;
+    }
+
+    public Fayl getRasm() {
+        return rasm;
+    }
+
+    public void setRasm(Fayl rasm) {
+        this.rasm = rasm;
     }
 }
